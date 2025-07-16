@@ -1,4 +1,4 @@
-name: JMeter Performance Tests
+name: 🚀 JMeter Performance Tests
 
 on:
   push:
@@ -8,45 +8,46 @@ on:
 
 jobs:
   performance-test:
+    name: 🔬 Run JMeter Load Test
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.7
-        options: --privileged
-
     steps:
-    - name: Checkout repo
+    # 📥 1. Checkout repository
+    - name: 📥 Checkout repository
       uses: actions/checkout@v4
 
-    - name: Start dummy app with Docker Compose
-      run: |
-        cd dummy-app
-        docker compose up -d --build
+    # 🐳 2. Build and start the dummy API using Docker Compose
+    - name: 🛠️ Build & Launch Dummy API with Docker Compose
+      working-directory: dummy-app
+      run: docker compose up -d --build
 
-    - name: Wait for the API to be ready
+    # ⏳ 3. Wait for the API to become available (responding with "pong")
+    - name: ⏱️ Wait for the API to be ready
       run: |
         for i in {1..10}; do
           if curl -s http://localhost:3000/api/ping | grep -q pong; then
-            echo "API is up ✅"
+            echo "✅ API is up and running"
             break
-            fi
-            echo "Waiting for API..."
-            sleep 5
+          fi
+          echo "⏳ Waiting for the API to respond..."
+          sleep 5
         done
 
-    - name: Run JMeter test
+    # 🧪 4. Run the JMeter test using the justb4/jmeter Docker image
+    - name: 🧪 Execute JMeter performance test
       run: |
         docker run --rm \
-            -v ${{ github.workspace }}/jmeter:/tests \
-            -w /tests \
-            justb4/jmeter \
-            -n -t test-plan.jmx \
-            -l results.jtl \
-            -e -o report
+          -v ${{ github.workspace }}/jmeter:/tests \
+          -w /tests \
+          justb4/jmeter \
+          -n -t test-plan.jmx \
+          -l resultados.jtl \
+          -e -o report
 
-    - name: Upload HTML Report
+    # 📤 5. Upload the HTML performance report as an artifact
+    - name: 📤 Upload HTML report
       uses: actions/upload-artifact@v4
       with:
         name: jmeter-html-report
         path: jmeter/report
+        retention-days: 30
