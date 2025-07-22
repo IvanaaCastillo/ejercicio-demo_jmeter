@@ -37,5 +37,3 @@ Este repositorio contiene un entorno mínimo para ejecutar pruebas de rendimient
 - Docker
 - Aplicación dummy en Node.js (opcional para pruebas locales)
 - Git
-
----
