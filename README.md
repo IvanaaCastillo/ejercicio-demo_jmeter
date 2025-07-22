@@ -33,6 +33,8 @@ Este repositorio contiene un entorno mínimo para ejecutar pruebas de rendimient
 
 # 🛠️ Tecnologías usadas
 
+- JavaScript
+- Express
 - Apache JMeter
 - Docker
 - Aplicación dummy en Node.js (opcional para pruebas locales)
